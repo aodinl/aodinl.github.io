@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>明度飽和度</title>
+	<link rel="shortcut icon" href="favicon.ico" />
+	
+	<style>
+	 * {
+		border-width: 0px;
+		margin: 0px;
+		padding: 0px;
+		border-style: none;
+		font-size: 100%;
+		font-weight: bold;
+	 }
+	 button {
+		width: 100%;
+		height: 100%;
+		border-style: none;
+	 }
+	 .right {
+		background-color: #66FF66;
+	 }
+	 .wrong {
+		background-color: #FF6666;
+	 }
+	 .mikakunin {
+		background-color: #ffffff;
+	 }
+	 table {
+		margin: auto;
+	 }
+	 #image {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 50%;
+	 }
+	 #chart {
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+		height: 50%;
+	 }
+	 #mother {
+		height: 100%;
+	 }
+	 html, body {
+		height: 100%;
+	 }
+	 table {
+		height: 100%;
+		width: 100%;
+	 }
+	 th {
+		height: 20%;
+	 }
+	 td {
+		width: 25%;
+	 }
+	 .kakunin {
+		color: #00FFFF;
+	 }
+	 #random-background {
+		height: 50%;
+		width: 50%;
+	 }
+	 .select-on {
+		background-color: #6495ED;
+	 }
+	 
+	 
+	 #powerpoint-pop {
+		display: none;
+		align-items: center;
+		justify-content: space-around;
+		position: absolute;
+		top: 0%;
+		left: 50%;
+		height: 10%;
+		width: 100%;
+		transform: translate(-50%, 0%);
+		background-color: #d9d9d9;
+	 }	
+	 .powerpointButton {
+		width: 20%;
+		height: 90%;
+	 }
+	 #powerpointInput {
+		height: 90%;
+		width: 50%;
+		font-size: 400%;
+	 }
+	 .powerpoint-on {
+		background-color: #6495ED;
+	 }
+	 
+	</style>
+	
+  </head>
+    
+  <body>
+
+	<div id="mother">
+	
+	<div id="image">
+    <!--<img id="random-image" src="">-->
+	<span id="random-background"></span>
+	</div>
+	
+	<div id="chart">
+		<table>
+			<tr>
+				<th colspan="3">
+					<p id="number"></p>
+				</th>
+				<th>
+					<button onclick="powerpointChecker(event)" class="powerpoint mikakunin">幻灯片</button>
+				</th>
+			</tr>
+			<tr>
+				<td>
+					<button onclick="iswitch(event)" class="mikakunin switch-button kakunin" value="0">s</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="1">1</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="2">2</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="3">3</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button onclick="iswitch(event)" class="mikakunin switch-button" value="1">v</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="4">4</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="5">5</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="6">6</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button onclick="iswitch(event)" class="mikakunin switch-button" value="2">sv</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="7">7</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="8">8</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="9">9</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button onclick="selectModeToggle(event)" class="mikakunin select-mode-button">选择模式</button>
+				</td>
+				<td>
+					<button id="out" onclick="weout()" class="mikakunin">显示</button>
+				</td>
+				<td>
+					<button onclick="kakunin(event)" class="mikakunin" value="10">10</button>
+				</td>
+				<td>
+					<button id="button" onclick="iclick()" class="mikakunin">下一个</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	</div>
+	
+	<div id="powerpoint-pop">
+		<input id="powerpointInput"/>
+		<button onclick="animationStart()" class="mikakunin powerpointButton"></button>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<script type="text/javascript">
+	
+      let v_images = ["1.png", "2.png", "3.png", "4.png","5.png","6.png","7.png","8.png","9.png","10.png"];
+	  let s_images = ["11.png", "12.png", "13.png", "14.png","15.png","16.png","17.png","18.png","19.png","20.png"];
+	  let sv_images = ["1.png", "2.png", "3.png", "4.png","5.png","6.png","7.png","8.png","9.png","10.png","11.png", "12.png", "13.png", "14.png","15.png","16.png","17.png","18.png","19.png","20.png"];
+	  let color_library = {"1.png": "#f2f2f2", "2.png": "#d9d9d9", "3.png": "#bfbfbf", "4.png": "#a6a6a6","5.png": "#8c8c8c","6.png": "#737373","7.png": "#595959","8.png": "#404040","9.png": "#262626","10.png": "#0d0d0d","11.png": "#fff2f2", "12.png": "#ffd8d9", "13.png": "#ffbfbf", "14.png": "#ffa6a6","15.png": "#ff8b8c","16.png": "#ff7372","17.png": "#ff5959","18.png": "#ff3f40","19.png": "#ff2625","20.png": "#ff0d0c"};
+	  
+	  let selection = 0;
+	  let selections = [s_images, v_images, sv_images];
+	  let images = selections[selection];
+	  
+	  let tempnumber = 0;
+	  let randomIndex = 0; // 随机生成一个索引
+	  let randomImage = "路径"; // 获取随机图片的路径
+	  
+	  let buttonMode = false;
+	  
+	  function get_number(origin_number) {
+   	    let result_number = 0;
+			if (origin_number > 10) {
+				result_number = origin_number - 10;
+			} else {
+				result_number = origin_number;
+			}
+			return result_number;
+		}
+	  
+	  //function change_image(para = 0) {
+		//randomIndex = para || (Math.floor(Math.random() * images.length) + 1); // 随机生成一个索引
+		//randomImage = images[randomIndex - 1]; // 获取随机图片的路径
+		//tempnumber = get_number(randomIndex);
+		//document.getElementById("random-image").src = randomImage; // 在页面中显示随机图片
+	  //}
+	  
+	  function change_background(para = 0) {
+		randomIndex = para ||(Math.floor(Math.random() * images.length) + 1); // 随机生成一个索引
+		randomImage = images[randomIndex - 1]; // 获取随机图片的路径
+		tempnumber = get_number(randomIndex);
+		document.getElementById("random-background").style.backgroundColor = color_library[randomImage]; // 在页面中显示随机图片
+	  }
+		
+	  function iclick() {
+		change_background();
+		//change_image();
+		
+		let button = document.getElementsByTagName("button");
+		for (let i = 0; i < button.length ; i++) {
+			button[i].classList.remove("wrong");
+			button[i].classList.remove("right");
+			button[i].classList.add("mikakunin");
+		}
+	  }
+	  
+	  function kakunin(event) {
+		if (buttonMode) {
+			change_background(event.srcElement.value);
+			//change_image(event.srcElement.value);
+		} else {
+			event.srcElement.classList.remove("right");
+			event.srcElement.classList.remove("wrong");
+			event.srcElement.classList.remove("mikakunin");
+			if (event.srcElement.value == tempnumber) {
+				event.srcElement.classList.add("right");
+			} else {
+			event.srcElement.classList.add("wrong");
+			}
+		}
+	  }
+	  
+	  function weout() {
+		document.getElementById("number").innerHTML = `${randomImage} randomIndex:${randomIndex} tempnumber:${tempnumber}`;
+	  }
+	  
+	  function iswitch(event) {
+		let iswitches = document.getElementsByClassName("switch-button");
+		for (let i = 0; i < iswitches.length; i++) {
+			iswitches[i].classList.remove("kakunin");
+		}
+		event.srcElement.classList.add("kakunin");
+		selection = event.srcElement.value;
+		images = selections[selection];
+		iclick();
+	  }
+	  
+	  function selectModeToggle(event) {
+		event.srcElement.classList.toggle("mikakunin");
+		event.srcElement.classList.toggle("select-on");
+		if (buttonMode) {
+			buttonMode = false;
+		} else {
+			buttonMode = true;
+		}
+	  }
+	  
+	  
+	  
+	  
+	  
+	  let temparray = [];
+	  let temparrayLength = 0;
+	  let pointer = 0;
+	  let intervalTime = 800;
+	  let powerpointCheck = false;
+	  let timer = 0;
+	  
+	  function animation(temparray) {
+		//console.log(pointer);
+		change_background(temparray[pointer]);
+		
+		if (pointer < temparrayLength - 1) {
+			pointer = pointer + 1;
+		} else {
+			pointer = 0;
+		}
+	  }
+	  
+	  function powerpointChecker(event) {
+		if (powerpointCheck) {
+			clearInterval(timer);
+			event.srcElement.classList.toggle("mikakunin");
+			event.srcElement.classList.toggle("powerpoint-on");
+			powerpointCheck = false;
+		} else {
+			event.srcElement.classList.toggle("mikakunin");
+			event.srcElement.classList.toggle("powerpoint-on");
+			document.getElementById("powerpoint-pop").style.display = "flex";
+			powerpointCheck = true;
+		}
+	  }
+	  
+	  function animationStart() {
+		let inputValue = document.getElementById("powerpointInput").value;
+		let resultValue = inputValue.split(',');
+		let i = 0;
+		for (i = 0; i < resultValue.length - 1; i++) {
+			temparray[i] = Number(resultValue[i]);
+		}
+		intervalTime = resultValue[i];
+		temparrayLength = i;
+		timer = setInterval(function() { animation(temparray); }, intervalTime);
+		document.getElementById("powerpoint-pop").style.display = "none";
+		//console.log(temparrayLength);
+	  }
+	  //let myAni = setInterval(function() { animation(temparray); }, intervalTime);
+	  
+	  
+	  
+	  
+	  change_background();
+	  //change_image();
+    </script>
+    
+	
+	
+	
+	
+	
+  </body>
+</html>

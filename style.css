@@ -1,0 +1,270 @@
+* {
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+    font-family: fangsong;
+    font-weight: 600;
+}
+
+body {
+    background-color: rgb(240, 239, 225);
+}
+
+#outbox {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+}
+
+#ue, #sita {
+    width: 100%;
+    height: 30px;
+    position: relative;
+}
+
+.migi {
+    height: 100%;
+    position: absolute;
+}
+
+.hidari {
+    height: 100%;
+    position: absolute;
+}
+
+#ue .migi {
+    height: 25px;
+    line-height: 25px;
+    width: 25%;
+    top: 2.5px;
+    background-color: rgb(180, 180, 180);
+}
+
+#migitxt {
+    height: 25px;
+    line-height: 25px;
+    position: absolute;
+    right: 6px;
+    font-family: serif;
+}
+
+#sita .migi {
+    left: 5%;
+    font-family: serif;
+    font-style: italic;
+    line-height: 30px;
+}
+
+#sita .hidari {
+    width: 50%;
+    right: 0px;
+    line-height: 30px;
+}
+
+#hidariblock {
+    display: inline-block;
+    height: 25px;
+    width: 20%;
+    top: 2.5px;
+    right: 0px;
+    position: absolute;
+    background-color: rgb(180, 180, 180);
+}
+
+#hidaritxt {
+    height: 30px;
+    position: absolute;
+    right: 23%;
+    font-family: serif;
+}
+
+#background {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 50%;
+    aspect-ratio: 3 / 2;
+    background-color: rgba(0, 0, 0, 0);
+    background: url(assets/background2.png);
+    background-size: 100% 100%;
+    z-index: -1;
+    opacity: 0.4;
+}
+
+#rightHalf {
+    height: 100%;
+    display: inline-grid;
+    grid-template-columns: repeat(10, 8% 2%);
+    grid-template-rows: repeat(20, 5%);
+    grid-auto-flow: column;
+    place-items: stretch;
+    gap: 0px;
+
+    .space {
+        grid-row-start: 1;
+        grid-row-end: 21;
+    }
+}
+
+#leftHalf {
+    height: 100%;
+    display: inline-grid;
+    grid-template-columns: repeat(10, 8% 2%);
+    grid-template-rows: repeat(20, 5%);
+    grid-auto-flow: column;
+    place-items: stretch;
+    gap: 0px;
+
+    .space {
+        grid-row-start: 1;
+        grid-row-end: 21;
+    }
+}
+
+#gyobi {
+    height: 100%;
+}
+
+#gennkou {
+    position: relative;
+    aspect-ratio: 26.5 / 20;
+    display: flex;
+    justify-content: center;
+    outline: 2px rgb(198, 134, 134) solid;
+    box-shadow: inset 0px 0px 0px 0.75px rgb(198, 134, 134);
+}
+
+.item {
+    font-size: 1.6vw;
+}
+
+@media screen and (max-aspect-ratio: 12.5 / 20) {
+
+    div#leftHalf {
+        display: none;
+    }
+
+    div#gyobi {
+        display: none;
+    }
+
+    #gennkou {
+        width: 90%;
+        height: auto;
+        aspect-ratio: 12.5 / 20;
+    }
+
+    #rightHalf {
+        width: 100%;
+    }
+
+    .item {
+        font-size: 2vh;
+    }
+}
+
+@media screen and (min-aspect-ratio: 12.6 / 20) and (max-aspect-ratio: 26.5 / 20){
+
+    #gennkou {
+        width: 90%;
+        height: auto;
+    }
+
+    #rightHalf {
+        width: calc(100% * 12.5 / 26.5);
+    }
+
+    #leftHalf {
+        width: calc(100% * 12.5 / 26.5);
+    }
+
+    #gyobi {
+        width: calc(100% * 1.5 / 26.5);
+    }
+}
+
+@media screen and (min-aspect-ratio: 26.6 / 20){
+
+    #gennkou{
+        width: auto;
+        height: 90%;
+    }
+
+        #rightHalf {
+        width: calc(100% * 12.5 / 26.5);
+    }
+
+    #leftHalf {
+        width: calc(100% * 12.5 / 26.5);
+    }
+
+    #gyobi {
+        width: calc(100% * 1.5 / 26.5);
+    }
+}
+
+.item {
+    outline: 1.5px solid rgb(221, 182, 185);
+    margin: 0.75px;
+    /* margin-left: 0.25px;
+    margin-right: 0.25px; */
+    /* margin-top: -1.5px;
+    margin-left: -1.5px; */
+}
+
+#gyobi {
+    position: relative;
+    box-shadow: -0.375px 0px 0px 0.375px rgb(221, 182, 185),
+                inset 0px 0px 0px 0.75px rgb(221, 182, 185);
+}
+
+#gyobiue {
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 22.5%;
+    transform: translate(-50%, -50%);
+}
+
+#gyobisita {
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 77.5%;
+    transform: translate(-50%, -50%);
+}
+
+.item {
+    transition-property: color;
+    transition-duration: 2s;
+    color: rgba(0, 0, 0, 0);
+    writing-mode: vertical-rl;
+}
+
+p {
+    display: inline-flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    display: inline-flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+}
+
+.clickIcon {
+    cursor: pointer;
+}
