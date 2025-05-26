@@ -34,5 +34,6 @@ let bookmarkList = [
 
 let irokunnrennList = [
                        {meisyou: "猜颜色", website:'./iroatari.html'}, 
-                       {meisyou: '明度饱和度', website:'./saturationandvalue.html'}
+                       {meisyou: '明度饱和度', website:'./saturationandvalue.html'},
+                       {meisyou: '顔色明度飽和度', website:'./irosaturationandvalue.html'}
                        ]
