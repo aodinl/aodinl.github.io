@@ -344,6 +344,9 @@
         const colorCircle = new ColorCircle();
 
         function nextColor() {
+	    let kakunin = document.getElementById('kakunin');
+	    kakunin.classList.remove('right');
+            kakunin.classList.remove('wrong');
             colorBackground.change();
         }
         function correctRes() {
