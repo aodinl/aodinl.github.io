@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色相</title>
+    <style>
+        #irocircleContainer {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .outer-circle {
+            position: relative;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            background: conic-gradient(from -90deg, rgb(255, 0, 0) 0deg, rgb(255, 255, 0) 60deg, rgb(0, 255, 0) 120deg, rgb(0, 255, 255) 180deg, rgb(0, 0, 255) 240deg, rgb(255, 0, 255) 300deg, rgb(255, 0, 0) 360deg);
+        }
+
+        .inner-circle {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pointer {
+            height: 2.5%;
+            width: calc(10% - 4px);
+            position: absolute;
+            top: 48.75%;
+            left: 1px;
+            border: 1px solid white;
+            outline: 1px solid black;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        .pointerFather {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0);
+            transform: rotate(0deg);
+        }
+    </style>
+    <style>
+        * {
+            margin: 0px;
+            border: 0px;
+            padding: 0px;
+        }
+
+        html,
+        body {
+            height: 100dvh;
+            width: 100dvw;
+        }
+
+        #ue {
+            height: 50%;
+            width: 100%;
+
+            #colorCon {
+                height: 80%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                #color,
+                #myColor {
+                    height: 100%;
+                    width: 50%;
+                }
+
+            }
+
+            #number {
+                height: 20%;
+                width: 100%;
+                display: flex;
+
+
+                #hsv {
+                    height: 100%;
+                    width: 50%;
+                }
+
+                #rgb {
+                    height: 100%;
+                    width: 50%;
+                }
+            }
+        }
+
+        #sita {
+            height: 50%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            flex-direction: column;
+        }
+
+        #mani {
+            height: 50%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="range"] {
+            writing-mode: vertical-lr;
+            direction: rtl;
+            appearance: none;
+            height: 20dvh;
+            width: 60px;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            appearance: none;
+            height: 20dvh;
+            width: 60px;
+            background-color: antiquewhite;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 60px;
+            height: 0px;
+            background-color: white;
+            border: 1px solid transparent;
+            border-image: linear-gradient(#f44336, #f44336) 0 fill / 0 0 0 0 / 0 0 99vh 0;
+        }
+
+        #adjust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        #finetune {
+            height: 80%;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-left: 5px;
+        }
+
+        #plus,
+        #minus {
+            height: 50%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            cursor: pointer;
+
+            svg {
+                width: 30%;
+            }
+        }
+
+        #saigo,
+        #lock {
+            height: 80%;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #my,
+        #correct,
+        #kakunin {
+            height: 33.3333%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #sLock,
+        #vLock,
+        #next {
+            height: 33.3333333%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #hsv,
+        #rgb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lock {
+            background-color: #00FFFF;
+        }
+
+        .right {
+            background-color: #66FF66;
+        }
+
+        .wrong {
+            background-color: #FF6666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ue">
+        <div id="colorCon">
+            <div id="color"></div>
+            <div id="myColor"></div>
+        </div>
+        <div id="number">
+            <div id="hsv"></div>
+            <div id="rgb"></div>
+        </div>
+    </div>
+    <div id="sita">
+        <div id="irocircleContainer" onclick="mybackOut()">
+            <div class="outer-circle">
+                <div class="inner-circle"></div>
+                <div class="pointerFather">
+                    <div class="pointer"></div>
+                </div>
+            </div>
+        </div>
+        <div id="mani">
+            <div id="lock">
+                <div id="sLock" onclick="lockV(event)">v锁定</div>
+                <div id="vLock" onclick="lockS(event)">s锁定</div>
+                <div id="next" onclick="nextColor()">下一个</div>
+            </div>
+            <div id="adjust">
+                <input type="range" min="0" max="360" step="1" value="0" id="inputValue" oninput="sliderChange(event)">
+                <div id="finetune">
+                    <div id="minus" onclick="nextFive()">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="right_SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="right_SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="right_SVGRepo_iconCarrier">
+                                <rect width="24" height="24" fill="white"></rect>
+                                <path
+                                    d="M2.5 12C2.5 12.2761 2.72386 12.5 3 12.5C3.27614 12.5 3.5 12.2761 3.5 12H2.5ZM3.5 12C3.5 7.30558 7.30558 3.5 12 3.5V2.5C6.75329 2.5 2.5 6.75329 2.5 12H3.5ZM12 3.5C15.3367 3.5 18.2252 5.4225 19.6167 8.22252L20.5122 7.77748C18.9583 4.65062 15.7308 2.5 12 2.5V3.5Z"
+                                    fill="#000000"></path>
+                                <path d="M20.4716 2.42157V8.07843H14.8147" stroke="#000000" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path
+                                    d="M21.5 12C21.5 11.7239 21.2761 11.5 21 11.5C20.7239 11.5 20.5 11.7239 20.5 12L21.5 12ZM20.5 12C20.5 16.6944 16.6944 20.5 12 20.5L12 21.5C17.2467 21.5 21.5 17.2467 21.5 12L20.5 12ZM12 20.5C8.66333 20.5 5.77477 18.5775 4.38328 15.7775L3.48776 16.2225C5.04168 19.3494 8.26923 21.5 12 21.5L12 20.5Z"
+                                    fill="#000000"></path>
+                                <path d="M3.52844 21.5784L3.52844 15.9216L9.18529 15.9216" stroke="#000000"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div id="plus" onclick="lastFive()">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <rect width="24" height="24" fill="white"></rect>
+                                <path
+                                    d="M2.5 12C2.5 12.2761 2.72386 12.5 3 12.5C3.27614 12.5 3.5 12.2761 3.5 12H2.5ZM3.5 12C3.5 7.30558 7.30558 3.5 12 3.5V2.5C6.75329 2.5 2.5 6.75329 2.5 12H3.5ZM12 3.5C15.3367 3.5 18.2252 5.4225 19.6167 8.22252L20.5122 7.77748C18.9583 4.65062 15.7308 2.5 12 2.5V3.5Z"
+                                    fill="#000000"></path>
+                                <path d="M20.4716 2.42157V8.07843H14.8147" stroke="#000000" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path
+                                    d="M21.5 12C21.5 11.7239 21.2761 11.5 21 11.5C20.7239 11.5 20.5 11.7239 20.5 12L21.5 12ZM20.5 12C20.5 16.6944 16.6944 20.5 12 20.5L12 21.5C17.2467 21.5 21.5 17.2467 21.5 12L20.5 12ZM12 20.5C8.66333 20.5 5.77477 18.5775 4.38328 15.7775L3.48776 16.2225C5.04168 19.3494 8.26923 21.5 12 21.5L12 20.5Z"
+                                    fill="#000000"></path>
+                                <path d="M3.52844 21.5784L3.52844 15.9216L9.18529 15.9216" stroke="#000000"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="saigo">
+                <div id="my" onclick="myRes()">自己</div>
+                <div id="correct" onclick="correctRes()">正确</div>
+                <div id="kakunin" onclick="kakunin(event)">确定</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sLockPara = false;
+        let vLockPara = false;
+
+        class MyColor {
+            constructor() {
+                this.target = document.getElementById('color');
+                this.hsvEle = document.getElementById('hsv');
+                this.rgbEle = document.getElementById('rgb');
+                this.H = 0;
+                this.S = 0;
+                this.V = 0;
+                this.change();
+            }
+            nextColor() {
+                if (!sLockPara) {
+                    this.S = Math.floor(Math.random() * 101);
+                }
+                if (!vLockPara) {
+                    this.V = Math.floor(Math.random() * 101);
+                }
+                this.H = Math.floor(Math.random() * 361);
+            }
+            get hue() {
+                return this.H;
+            }
+            get saturation() {
+                return this.S;
+            }
+            get value() {
+                return this.V;
+            }
+            get rgb() {
+                let s = this.S / 100;
+                let v = this.V / 100;
+                let hIndex = Math.floor(this.H / 60);
+                let f = this.H / 60 - hIndex;
+                let p = v * (1 - s);
+                let q = v * (1 - f * s);
+                let t = v * (1 - (1 - f) * s);
+
+                let r = 0;
+                let g = 0;
+                let b = 0;
+
+                if (hIndex == 0 || hIndex == 6) {
+                    r = v;
+                    g = t;
+                    b = p;
+                } else if (hIndex == 1) {
+                    r = q;
+                    g = v;
+                    b = p;
+                } else if (hIndex == 2) {
+                    r = p;
+                    g = v;
+                    b = t;
+                } else if (hIndex == 3) {
+                    r = p;
+                    g = q;
+                    b = v;
+                } else if (hIndex == 4) {
+                    r = t;
+                    g = p;
+                    b = v;
+                } else if (hIndex == 5) {
+                    r = v;
+                    g = p;
+                    b = q;
+                }
+
+                return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+            }
+            change() {
+                this.nextColor();
+                this.target.style.backgroundColor = `rgb(${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b})`;
+            }
+            numberOut() {
+                this.hsvEle.innerHTML = `H: ${this.H}, S: ${this.S}, V: ${this.V}`;
+                this.rgbEle.innerHTML = `R: ${this.rgb.r}, G: ${this.rgb.g}, B: ${this.rgb.b}`;
+            }
+        }
+
+        class ColorCircle {
+            constructor() {
+                this.inputor = document.getElementById('inputValue');
+                this.innerCircle = document.getElementsByClassName('inner-circle')[0];
+                this.pointer = document.getElementsByClassName('pointerFather')[0];
+                this.H = 0;
+                this.hue = this.H;
+            }
+            set hue(number) {
+                this.H = number;
+                this.innerCircle.innerHTML = `${this.H}`;
+                this.pointerChange();
+                // this.pointer.style.transform = `rotate(${this.H}deg)`;
+            }
+            get hue() {
+                return this.H;
+            }
+            pointerChange(value = this.hue) {
+                this.pointer.style.transform = `rotate(${value}deg)`;
+            }
+            nextFive() {
+                // console.log(this.hue);
+                if (this.hue + 5 > 360) {
+                    this.hue = this.hue + 5 - 360;
+                } else {
+                    this.hue = this.hue + 5;
+                }
+                this.inputor.value = this.hue;
+            }
+            lastFive() {
+                if (this.hue - 5 < 0) {
+                    this.hue = this.hue - 5 + 360;
+                } else {
+                    this.hue = this.hue - 5;
+                }
+                this.inputor.value = this.hue;
+            }
+        }
+
+        const colorBackground = new MyColor();
+        const colorCircle = new ColorCircle();
+
+        function nextColor() {
+            let kakunin = document.getElementById('kakunin');
+            kakunin.classList.remove('right');
+            kakunin.classList.remove('wrong');
+            colorBackground.change();
+        }
+        function correctRes() {
+            colorBackground.numberOut();
+            colorCircle.pointerChange(colorBackground.hue);
+        }
+        function sliderChange(event) {
+            colorCircle.hue = Number(event.srcElement.value);
+        }
+        function nextFive() {
+            // console.log(1);
+            colorCircle.nextFive();
+        }
+        function lastFive() {
+            colorCircle.lastFive();
+        }
+        function myRes() {
+            colorCircle.pointerChange();
+        }
+        function lockS(event) {
+            sLockPara = !sLockPara;
+            event.srcElement.classList.toggle('lock');
+        }
+        function lockV(event) {
+            vLockPara = !vLockPara;
+            event.srcElement.classList.toggle('lock');
+        }
+        function kakunin(event) {
+            event.srcElement.classList.remove('right');
+            event.srcElement.classList.remove('wrong');
+            if (Math.abs(colorBackground.hue - colorCircle.hue) <= 5) {
+                event.srcElement.classList.add('right');
+            } else {
+                event.srcElement.classList.add('wrong');
+            }
+        }
+
+        const mybackColor = document.getElementById('myColor');
+        function mycolorChange(myH, myS, myV) {
+            let s = myS / 100;
+            let v = myV / 100;
+            let hIndex = Math.floor(myH / 60);
+            let f = myH / 60 - hIndex;
+            let p = v * (1 - s);
+            let q = v * (1 - f * s);
+            let t = v * (1 - (1 - f) * s);
+
+            let r = 0;
+            let g = 0;
+            let b = 0;
+
+            if (hIndex == 0 || hIndex == 6) {
+                r = v;
+                g = t;
+                b = p;
+            } else if (hIndex == 1) {
+                r = q;
+                g = v;
+                b = p;
+            } else if (hIndex == 2) {
+                r = p;
+                g = v;
+                b = t;
+            } else if (hIndex == 3) {
+                r = p;
+                g = q;
+                b = v;
+            } else if (hIndex == 4) {
+                r = t;
+                g = p;
+                b = v;
+            } else if (hIndex == 5) {
+                r = v;
+                g = p;
+                b = q;
+            }
+
+            return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+        }
+        function mybackOut() {
+            let rgb = mycolorChange(colorCircle.hue, colorBackground.saturation, colorBackground.value);
+            // console.log(rgb);
+            mybackColor.style.backgroundColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`
+        }
+    </script>
+</body>
+
+</html>
