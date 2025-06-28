@@ -346,8 +346,91 @@
 
 		let colorObject = new Color();
     </script>
-    
-	
+
+	<script type="text/javascript">
+		const buttons = document.getElementsByTagName('button');
+		let buttonGroup = [];
+		for (let i = 0; i < 4; i++) {
+			buttonGroup[i] = [];
+			for (let m = 0; m < 4; m++) {
+				buttonGroup[i][m] = buttons[i * 4 + m];
+			}
+		}
+
+		class MyPointer {
+			constructor() {
+				this.x = 0;
+				this.y = 0;
+			}
+			up() {
+				if (this.y <= 0) {
+					this.y = 0;
+				} else {
+					this.y = this.y - 1;
+				}
+			}
+			down() {
+				if (this.y >= 3) {
+					this.y = 3;
+				} else {
+					this.y = this.y + 1;
+				}
+			}
+			left() {
+				if (this.x <= 0) {
+					this.x = 0;
+				} else {
+					this.x = this.x - 1;
+				}
+			}
+			right() {
+				if (this.x >= 3) {
+					this.x = 3;
+				} else {
+					this.x = this.x + 1;
+				}
+			}
+		}
+		const pointer = new MyPointer();
+
+		function moveAction(direction) {
+			switch(direction) {
+				case 0: 
+					pointer.left();
+					break;
+				case 1: 
+					pointer.right();
+					break;
+				case 2:
+					pointer.up();
+					break;
+				case 3:
+					pointer.down();
+					break;
+			}
+			buttonGroup[pointer.y][pointer.x].focus();
+		}
+
+		let myHtml = document.getElementsByTagName('html')[0];
+		function movePointer(event) {
+			console.log(event.code);
+			switch(event.code) {
+				case 'KeyJ':
+					moveAction(0);
+					break;
+				case 'KeyK':
+					moveAction(1);
+					break;
+				case 'KeyL':
+					moveAction(2);
+					break;
+				case 'Semicolon':
+					moveAction(3);
+					break;
+			}
+		}
+		myHtml.addEventListener('keydown', movePointer);
+	</script>
 	
 	
 	
