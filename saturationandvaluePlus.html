@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明度饱和度Plus</title>
+
+    <style>
+        * {
+            margin: 0px;
+            border: 0px;
+            padding: 0px;
+        }
+
+        html,
+        body {
+            height: 100dvh;
+            width: 100dvw;
+        }
+
+        #ue {
+            height: 30%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            #sampleColor, #myColor {
+                height: 100%;
+                width: 50%;
+            }
+
+            #myColor {
+                background-color: white;
+            }
+        }
+
+        #naka {
+            width: 100%;
+            height: 30%;
+        }
+
+        #sita {
+            width: 100%;
+            height: 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <style>
+        #panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            /* background-color: rgb(87, 87, 87); */
+
+            #leftNumber, #rightNumber {
+                height: 100%;
+                flex: 1;
+            }
+
+            #leftNumber {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                & > * {
+                    height: 33.33%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            #rightNumber {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        #panelContainer {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+        }
+        #outbox {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)),
+			linear-gradient(to right, rgba(255,255,255,1), rgba(255,0,0,1));
+            position: relative;
+        }
+        #panelPointer {
+            background-color: rgba(255, 255, 255, 0);
+        }
+    </style>
+
+    <style>
+        #lockPanel {
+            width: 25%;
+            height: 100%;
+            
+            & > * {
+                height: 25%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        #maniPanel {
+            width: 75%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            #slidePanel {
+                height: 75%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                #adjust {
+                    width: 90%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    #fineTune {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+
+                        #left, #right {
+                            width: 50%;
+                            height: 60px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+
+            #buttonPanel {
+                height: 25%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                & > * {
+                    width: 33.33%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    </style>
+
+    <style>
+        input[type="range"] {
+            appearance: none;
+            height: 60px;
+            width: 60dvw;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            appearance: none;
+            height: 60px;
+            width: 60dvw;
+            background-color: antiquewhite;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 0px;
+            height: 60px;
+            background-color: white;
+            border: 1px solid transparent;
+            border-image: linear-gradient(#f44336, #f44336) 0 fill / 0 0 0 0 / 0 0 0 99vw;
+        }
+    </style>
+
+    <style>
+        .kakunin {
+            background-color: #00FFFF;
+        }
+        .right {
+            background-color: #66FF66;
+        }
+
+        .wrong {
+            background-color: #FF6666;
+        }
+    </style>
+</head>
+<body>
+    <div id="ue">
+        <div id="sampleColor"></div>
+        <div id="myColor"></div>
+    </div>
+
+    <div id="naka">
+        <div id="panel">
+            <div id="leftNumber">
+                <div id="h"></div>
+                <div id="s"></div>
+                <div id="v"></div>
+            </div>
+            <div id="panelContainer" onclick="displayMyColor()">
+                <div id="outbox">
+                    <canvas id="panelPointer" height="100%" width="100%"></canvas>
+                </div>
+            </div>
+            <div id="rightNumber"></div>
+        </div>
+    </div>
+
+    <div id="sita">
+        <div id="lockPanel">
+            <div id="sSelector" class="switch-button kakunin" onclick="iswitch(event)">s</div>
+            <div id="vSelector" class="switch-button" onclick="iswitch(event)">v</div>
+            <div id="hueLocker" onclick="hueLock()">色相锁定</div>
+            <div id="otherLocker" onclick="otherLock()">相对锁定</div>
+        </div>
+        <div id="maniPanel">
+            <div id="slidePanel">
+                <div id="adjust">
+                    <input type="range" min="0" max="100" step="1" value="0" id="inputValue" oninput="sliderChange()">
+                    <div id="fineTune">
+                        <div id="left" onclick="lastFive()">&lt;</div>
+                        <div id="right" onclick="nextFive()">&gt;</div>
+                    </div>
+                </div>
+            </div>
+            <div id="buttonPanel">
+                <div id="display" onclick="display()">显示</div>
+                <div id="nextONe" onclick="nextColor()">下一个</div>
+                <div id="checkButton" onclick="myCheck()">确定</div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        class CheckButton {
+            constructor() {
+                this.body = document.getElementById('checkButton');
+            }
+            clear() {
+                this.body.classList.remove('right');
+                this.body.classList.remove('wrong');
+            }
+            right() {
+                this.body.classList.add('right');
+            }
+            wrong() {
+                this.body.classList.add('wrong');
+            }
+        }
+
+        const checkBUtton = new CheckButton();
+    </script>
+
+    <script>
+        let outbox = document.getElementById("outbox");
+        let panelPointer = document.getElementById("panelPointer");
+        panelPointer.width = outbox.offsetWidth;
+        panelPointer.height = outbox.offsetHeight;
+        let r = outbox.offsetWidth / 30;
+		let lineWidth = r / 5;
+        const ctx = panelPointer.getContext('2d');
+
+
+        function draw(xIndex, yIndex) {
+            let x = xIndex * panelPointer.width;
+            let y = yIndex * panelPointer.height;
+            ctx.clearRect(0, 0, panelPointer.width, panelPointer.height);
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+			ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = "rgb(255, 255, 255)";
+            ctx.stroke();
+			ctx.beginPath();
+            ctx.arc(x, y, r + lineWidth / 2 + lineWidth / 4, 0, Math.PI * 2);
+			ctx.lineWidth = lineWidth / 2;
+            ctx.strokeStyle = "rgb(0, 0, 0)";
+            ctx.stroke();
+        }
+    </script>
+
+    <script>
+        let isSSelected = true;
+        let isHueLocked = false;
+        let isOtherLocked = false;
+
+        let hueLocker = document.getElementById('hueLocker');
+        let otherLocker = document.getElementById('otherLocker');
+
+        function iswitch(event) {
+			let iswitches = document.getElementsByClassName("switch-button");
+			for (let i = 0; i < iswitches.length; i++) {
+				iswitches[i].classList.remove("kakunin");
+			}
+			event.srcElement.classList.add("kakunin");
+            if(event.srcElement.id == 'sSelector') {
+                isSSelected = true;
+            } else {
+                isSSelected = false;
+            };
+		}
+
+        function hueLock() {
+            isHueLocked = !isHueLocked;
+            hueLocker.classList.toggle('kakunin');
+        }
+
+        function otherLock() {
+            isOtherLocked = !isOtherLocked;
+            otherLocker.classList.toggle('kakunin');
+        }
+    </script>
+
+    <script>
+        const inputA = document.getElementById('inputValue');
+        class ColorPanel {
+            insideInput = inputA;
+            mydraw(hsv) {
+                let value = Number(this.insideInput.value);
+                if(isSSelected) {
+                    draw(value / 100, 1 - hsv.v / 100);
+                } else {
+                    draw(hsv.s / 100, 1 - value / 100);
+                }
+            }
+        }
+
+        const colorPanel = new ColorPanel();
+    </script>
+
+    <script>
+        function hsvCon(hsv) {
+            let s = hsv.s / 100;
+            let v = hsv.v / 100;
+            let hIndex = Math.floor(hsv.h / 60);
+            let f = hsv.h / 60 - hIndex;
+            let p = v * (1 - s);
+            let q = v * (1 - f * s);
+            let t = v * (1 - (1 - f) * s);
+
+            let r = 0;
+            let g = 0;
+            let b = 0;
+
+            if (hIndex == 0 || hIndex == 6) {
+                r = v;
+                g = t;
+                b = p;
+            } else if (hIndex == 1) {
+                r = q;
+                g = v;
+                b = p;
+            } else if (hIndex == 2) {
+                r = p;
+                g = v;
+                b = t;
+            } else if (hIndex == 3) {
+                r = p;
+                g = q;
+                b = v;
+            } else if (hIndex == 4) {
+                r = t;
+                g = p;
+                b = v;
+            } else if (hIndex == 5) {
+                r = v;
+                g = p;
+                b = q;
+            }
+
+            return {r : r * 255, g : g * 255, b : b * 255};
+        }
+    </script>
+
+    <script>
+        function changeElse(hsv) {
+            let rgb = hsvCon({h: hsv.h, s: 100, v: 100});
+            outbox.style.background = 'linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)),' +
+                                      'linear-gradient(to right, rgba(255,255,255,1), rgba('+ rgb.r + ',' + rgb.g + ',' + rgb.b + ',1))';
+        }
+
+        class SampleColor {
+            constructor() {
+                this.sample = document.getElementById('sampleColor');
+                this.hsv = {h: 0, s: 0, v: 0};
+                this.nextColor();
+                changeElse(this.hsv);
+                colorPanel.mydraw(this.hsv);
+            }
+            nextColor() {
+                if(!isHueLocked) this.hsv.h = Math.floor(Math.random() * 361);
+                if (isSSelected || !isOtherLocked) this.hsv.s = Math.floor(Math.random() * 101);
+				if (!isSSelected || !isOtherLocked) this.hsv.v = Math.floor(Math.random() * 101);
+                let rgb = hsvCon(this.hsv);
+				this.sample.style.backgroundColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            }
+        }
+
+        const sample = new SampleColor();
+
+        function nextColor() {
+            sample.nextColor();
+            changeElse(sample.hsv);
+            colorPanel.mydraw(sample.hsv);
+            checkBUtton.clear();
+        }
+    </script>
+
+    <script>
+        let rightNumber = document.getElementById('rightNumber');
+        function sliderChange() {
+            colorPanel.mydraw(sample.hsv);
+            rightNumber.innerHTML = `${Number(inputA.value)}`;
+        }
+        function nextFive() {
+            let value = Number(inputA.value);
+            if(value + 5 > 100) {
+                value = 100;
+            } else {
+                value = value + 5;
+            }
+            inputA.value = value;
+            colorPanel.mydraw(sample.hsv);
+            rightNumber.innerHTML = `${Number(inputA.value)}`;
+        }
+        function lastFive() {
+            let value = Number(inputA.value);
+            if(value - 5 < 0) {
+                value = 0;
+            } else {
+                value = value - 5;
+            }
+            inputA.value = value;
+            colorPanel.mydraw(sample.hsv);
+            rightNumber.innerHTML = `${Number(inputA.value)}`;
+        }
+    </script>
+
+    <script>
+        function myCheck() {
+            checkBUtton.clear();
+            if(isSSelected) {
+                if(Math.abs(sample.hsv.s - Number(inputA.value)) <= 5) {
+                    checkBUtton.right();
+                } else {
+                    checkBUtton.wrong();
+                }
+            } else {
+                if(Math.abs(sample.hsv.v - Number(inputA.value)) <= 5) {
+                    checkBUtton.right();
+                } else {
+                    checkBUtton.wrong();
+                }
+            }
+        }
+    </script>
+
+    <script>
+        let displayH = document.getElementById('h');
+        let displayS = document.getElementById('s');
+        let displayV = document.getElementById('v');
+        function display() {
+            displayH.innerHTML = `h: ${sample.hsv.h}`;
+            displayS.innerHTML = `s: ${sample.hsv.s}`;
+            displayV.innerHTML = `v: ${sample.hsv.v}`;
+        }
+
+        let myColor = document.getElementById('myColor');
+        function displayMyColor() {
+            let rgb = {r: 0, g: 0, b: 0};
+            if(isSSelected) {
+                rgb = hsvCon({h: sample.hsv.h, s: Number(inputA.value), v: sample.hsv.v});
+            } else {
+                rgb = hsvCon({h: sample.hsv.h, s: sample.hsv.s, v: Number(inputA.value)});
+            }
+            myColor.style.backgroundColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+        }
+    </script>
+</body>
+</html>
