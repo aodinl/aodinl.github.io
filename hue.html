@@ -396,6 +396,11 @@
             get rgb() {
                 return hsvCon(this.hsv);
             }
+
+            set shsv(sample) {
+                this.hsv = sample;
+                this.target.style.backgroundColor = `rgb(${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b})`;
+            }
         }
 
         const backgroundZoneLeft = new BackgroundZone(document.getElementById('backgroundZoneLeft'));
@@ -406,7 +411,7 @@
         }
 
         function backgroundZoneRightChange() {
-            backgroundZoneRight.next();
+            backgroundZoneRight.shsv = backgroundZoneLeft.hsv;
         }
     </script>
 
@@ -540,9 +545,6 @@
             kakunin.classList.remove('right');
             kakunin.classList.remove('wrong');
             colorBackground.change();
-
-            backgroundZoneLeftChange();
-            backgroundZoneRightChange();
         }
         function correctRes() {
             colorBackground.numberOut();
@@ -630,3 +632,4 @@
 </body>
 
 </html>
+
